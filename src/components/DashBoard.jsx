@@ -1,14 +1,27 @@
 import { useNavigate } from "react-router-dom";
 import { logApi } from "../api/api";
+import { managerLogoutApi } from "../api/api"; 
+import { logoutApi } from "../api/api"; 
+
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const role = localStorage.getItem("role");
 
-  const logout = () => {
-    localStorage.clear();
-    navigate("/login");
-  };
+const logout = async () => {
+  try {
+    // ✅ Call backend logout (logs MANAGER logout)
+    await logoutApi();
+  } catch (err) {
+    console.error("Logout API failed", err);
+  }
+
+  // ✅ Clear frontend data
+  localStorage.clear();
+
+  // ✅ Redirect to login
+  navigate("/login");
+};
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -44,6 +57,7 @@ export default function Dashboard() {
           </div>
         )}
 
+        {/* USER LOGS */}
         {(role === "ADMIN" || role === "MANAGER") && (
           <button
             onClick={() => navigate("/logs")}
@@ -52,6 +66,17 @@ export default function Dashboard() {
             View Logs
           </button>
         )}
+
+        {/* NEW: Manager Activity (Admin Only) */}
+        {role === "ADMIN" && (
+          <button
+            onClick={() => navigate("/manager-activity")}
+            className="bg-indigo-600 text-white px-4 py-2 rounded ml-3"
+          >
+            Manager Activity
+          </button>
+        )}
+
       </div>
     </div>
   );

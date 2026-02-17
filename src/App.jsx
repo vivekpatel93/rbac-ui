@@ -1,8 +1,9 @@
 
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./components/Login"
-import Dashboard from "./components/Dashboard";
-import Logs from "./components/Logs";
+import Dashboard from "./components/DashBoard"
+import Logs from "./components/Logs"
+import ManagerActivity from "./pages/ManagerActivity"
 
 export default function App() {
   const token = localStorage.getItem("token");
@@ -14,7 +15,9 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/logs" element={<Logs />} />
+        <Route path="/manager-activity" element={<ManagerActivity />}/>
         <Route path="*" element={<Navigate to="/" />} />
+
       </Routes>
     </BrowserRouter>
   );

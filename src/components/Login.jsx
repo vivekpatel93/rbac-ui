@@ -8,22 +8,60 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+  // const login = async () => {
+  //   try {
+  //     const data = await loginApi({ username, password });
+
+  //     if (!data.token) throw new Error();
+
+  //     const role = getRoleFromToken(data.token);
+
+  //     localStorage.setItem("token", data.token);
+  //     localStorage.setItem("role", role);
+
+  //   // NEW: Log Manager Login
+  //   if (role === "MANAGER") {
+  //   await managerLoginApi();
+  //   }
+
+  //     navigate("/dashboard");
+  //   } catch {
+  //     alert("Invalid Credentials");
+  //   }
+  // };
+
   const login = async () => {
-    try {
-      const data = await loginApi({ username, password });
+  try {
+    console.log("Sending:", { username, password });
 
-      if (!data.token) throw new Error();
+    const res = await fetch("http://localhost:8080/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username, password }),
+    });
 
-      const role = getRoleFromToken(data.token);
+    const data = await res.json();
 
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("role", role);
+    console.log("Response:", data);
 
-      navigate("/dashboard");
-    } catch {
-      alert("Invalid Credentials");
+    if (!res.ok) {
+      throw new Error("Login failed");
     }
-  };
+
+    const role = getRoleFromToken(data.token);
+
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("role", role);
+
+    navigate("/dashboard");
+  } catch (e) {
+    console.error(e);
+    alert("Invalid Credentials");
+  }
+};
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">

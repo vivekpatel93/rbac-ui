@@ -12,18 +12,15 @@ export const loginApi = async (data) => {
 
 export const logApi = async (button) => {
   const token = localStorage.getItem("token");
-  const role = localStorage.getItem("role");
 
-  await fetch(
-    `${BASE_URL}/user/log?button=${button}&role=${role}&userId=1`,
-    {
-      method: "POST",
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    }
-  );
+  await fetch(`${BASE_URL}/user/log?button=${button}`, {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  });
 };
+
 
 export const getLogsApi = async () => {
   const token = localStorage.getItem("token");
@@ -35,4 +32,54 @@ export const getLogsApi = async () => {
   });
 
   return res.json();
+};
+
+// NEW: Manager Login Activity API
+export const managerLoginApi = async () => {
+  const token = localStorage.getItem("token");
+
+  await fetch(`${BASE_URL}/manager/login-log`, {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  });
+};
+
+// NEW: Manager Logout Activity API
+
+export const managerLogoutApi = async () => {
+  const token = localStorage.getItem("token");
+
+  await fetch(`${BASE_URL}/manager/logout-log`, {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  });
+};
+
+// NEW: Admin Get Manager Activity
+
+export const getManagerActivityApi = async () => {
+  const token = localStorage.getItem("token");
+
+  const res = await fetch(`${BASE_URL}/admin/manager-activity`, {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  });
+
+  return res.json();
+};
+
+export const logoutApi = async () => {
+  const token = localStorage.getItem("token");
+
+  await fetch(`${BASE_URL}/auth/logout`, {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  });
 };
